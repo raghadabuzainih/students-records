@@ -1,0 +1,32 @@
+[
+    {
+        "name" : "Lana Ahmad",
+        "major" : "Computer Science",
+        "gpa" : 3
+    },
+    {
+        "name" : "Mera Assad",
+        "major" : "Energy Engineering",
+        "gpa" : 2.5
+    },
+    {
+        "name" : "ميرا خليل",
+        "major" : "Energy Engineering",
+        "gpa" : 2.5
+    },
+    {
+        "name" : "Hala Ayman",
+        "major" : "Energy Engineering",
+        "gpa" : 3
+    },
+    {
+        "name" : "يوسف احمد",
+        "major" : "Energy Engineering",
+        "gpa" : 2.5
+    },
+    {
+        "name" : "Bana Nazem",
+        "major" : "Energy Engineering",
+        "gpa" : 4
+    }
+]

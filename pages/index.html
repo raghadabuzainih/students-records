@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Records</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="all-project">
+        <div class="records">
+            <div class="header">
+                <div>
+                    <h1 data-i18n="Students Records">Students Records</h1>
+                    <h2 data-i18n="Manage and track student information">Manage and track student information</h2>
+                </div>
+                <button data-i18n="Switch" id="en" class="switch-lan">Switch to Arabic</button>
+            </div>
+            <button class="add" data-i18n="Add New Student">+ Add New Student</button>
+            <div class="search-and-filter">
+                <input type="text" class="name-search" placeholder="Search By Name" data-i18n-placeholder="Search By Name">
+                <input type="text" class="major-search" placeholder="Search By Major" data-i18n-placeholder="Search By Major">
+                <span data-i18n="Filter GPA">Filter GPA</span> <div class="sort"><button class="filterup"><i class="fa-solid fa-sort-up"></i></button><button class="filterdown"><i class="fa-solid fa-sort-down"></i></button></div>
+                <input class="filter-input" type="text">
+            </div>
+            </div>
+            <div class="statistics">
+                <div class="statistics-table">
+                    <table class="info-table">
+                        <tr>
+                            <th class="name-column">
+                                <div class="info-th">
+                                    <span data-i18n="Name">Name</span>
+                                    <div class="sort">
+                                        <button class="sortup-name"><i class="fa-solid fa-sort-up"></i></button>
+                                        <button class="sortdown-name"><i class="fa-solid fa-sort-down"></i></button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="major-column">
+                                <div class="info-th">
+                                    <span data-i18n="Major">Major</span>
+                                    <div class="sort">
+                                        <button class="sortup-major"><i class="fa-solid fa-sort-up"></i></button>
+                                        <button class="sortdown-major"><i class="fa-solid fa-sort-down"></i></button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="gpa-column">
+                                <div class="info-th">
+                                    <span data-i18n="GPA">GPA</span>
+                                    <div class="sort">
+                                        <button class="sortup-gpa"><i class="fa-solid fa-sort-up"></i></button>
+                                        <button class="sortdown-gpa"><i class="fa-solid fa-sort-down"></i></button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th data-i18n="Edit/Delete">Edit/Delete</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="details">
+                    <div>
+                        <h3 data-i18n="Students By Major">Students By Major</h3>
+                        <table class="count-table">
+                            <tr>
+                                <th data-i18n="Major">Major</th>
+                                <th data-i18n="Count">Count</th>
+                                <th class="avg-major" data-i18n="Average GPA">Average GPA</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="number-and-avg">
+                        <label for="students-number" data-i18n="Total Students:">Total Students: </label><span class="students-number"></span>
+                        <br>
+                        <label for="avg-gpa" data-i18n="Total Average GPA:">Total Average GPA: </label><span class="avg-gpa"></span>
+                        <br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blur"></div>
+    <form class="add-form" method="post">
+         <div class="label-input">
+                <label for="name" data-i18n="Name">Name</label>
+                <input id="name" type="text" name="name" required>
+        </div>
+        <div class="label-input">
+            <label for="major" data-i18n="Major">Major</label>
+            <input id="major" type="text" name="major" required>
+        </div>
+        <div class="label-input">
+            <label for="gpa" data-i18n="GPA">GPA</label>
+            <input id="gpa" type="text" name="gpa" required>
+        </div>
+        <div class="confirm-alert">
+            <button type="submit" class="submit-new-record" data-i18n="Add Student">Add Student</button>
+            <button type="submit" class="cancel" data-i18n="Cancel">Cancel</button>
+        </div>
+    </form>
+    <div class="confirm-delete">
+        <h2 data-i18n="Deletion Message">Are you sure you want to delete this student?</h2>
+        <div class="confirm-alert">
+            <button class="yes" type="submit" data-i18n="Yes">Yes</button>
+            <button class="no" type="submit" data-i18n="No">No</button>
+        </div>
+    </div>
+    <div class="confirm-edit">
+        <div class="label-input">
+                <label for="editName" data-i18n="Name">Name</label>
+                <input id="editName" type="text" name="editName" required>
+        </div>
+        <div class="label-input">
+            <label for="editMajor" data-i18n="Major">Major</label>
+            <input id="editMajor" type="text" name="editMajor" required>
+        </div>
+        <div class="label-input">
+            <label for="editGPA" data-i18n="GPA">GPA</label>
+            <input id="editGPA" type="text" name="editGPA" required>
+        </div>
+        <div class="confirm-alert">
+            <button type="submit" class="save" data-i18n="Save Changes">Save Changes</button>
+            <button type="submit" class="cancel-edit" data-i18n="Cancel">Cancel</button>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+</body>
+</html>

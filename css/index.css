@@ -1,0 +1,273 @@
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: aliceblue;
+    text-align: center;
+}
+
+.all-project{
+    width: 65%;
+    padding: 1rem;
+    margin-left: 15%;
+    margin-right: 20%;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+}
+
+.switch-lan{
+    height: 1rem;
+    background-color: #2b267c;
+    color: white;
+}
+
+button{
+    cursor: pointer;
+    border: none;
+}
+
+.add{
+    width: 100%;
+}
+
+.add, .submit-new-record{
+    background-color: rgb(25, 110, 25);
+    color: white;
+}
+
+.blur{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    height: 200%;
+    backdrop-filter: blur(5px);
+}
+
+.add-form, .confirm-edit{
+    display: none;
+    padding: 1rem;
+    position: absolute;
+    top: 35%;
+    left: 36%;
+    width: 20rem;
+    padding: 2rem;
+    z-index: 1;
+    border-radius: 1rem;
+    color: white;
+    background-color: rgb(83, 145, 83);
+}
+
+.confirm-delete{
+    display: none;
+    padding: 1rem;
+    position: absolute;
+    top: 35%;
+    width: 30rem;
+    left: 33%;
+    z-index: 1;
+    border-radius: 1rem;
+    color: white;
+}
+
+.confirm-delete{
+    background-color: rgb(236, 87, 87);
+}
+
+.confirm-edit{
+    background: rgb(83, 145, 83);
+}
+
+.confirm-delete button, .confirm-edit button{
+    font-size: 1rem;
+    height: 2rem;
+    padding: .4rem;
+    color: black;
+    border-radius: 1rem;
+}
+
+.yes, .cancel-edit{
+    background-color: red;
+    border: none;
+    margin-bottom: 1rem;
+}
+
+.no{
+    background-color: green;
+    border: none;
+    margin-bottom: 1rem;
+}
+
+.confirm-alert{
+    display: flex;
+    gap: 1rem;
+    justify-self: center;
+}
+
+.label-input{
+    display: grid;
+    gap: .4rem;
+    margin-bottom: 1rem;
+}
+
+.statistics{
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.info-table th{
+    background:#2b267c;
+    color: white;
+    align-items: center;
+    text-align: center;
+}
+
+.info-th{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.statistics-table{
+    width: 70%;
+}
+
+.details, .statistics-table{
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow:  0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.info-table{
+    width: 100%;
+}
+
+td, th, .info-table button{
+    padding: 1rem;
+}
+
+.search-and-filter{
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.filter{
+    display: flex;
+    background-color: #2b267c;
+}
+
+.name-search, .major-search{
+    width: 35%;
+}
+
+.add, .search-and-filter input, .submit-new-record, .cancel{
+    padding: .4rem;
+    border-radius: .5rem;
+    border: none;
+}
+
+.submit-new-record, .cancel{
+    font-size: 1rem;
+    height: 2rem;
+    padding: .4rem;
+    display: block;
+}
+
+.add-form input, .confirm-edit input{
+    border-radius: .5rem;
+    padding: .4rem;
+    box-sizing: border-box;
+    border: none;
+}
+
+.sortup-name, .sortup-major,.sortup-gpa,
+.sortdown-name, .sortdown-major,.sortdown-gpa, .filterup, .filterdown{
+    width: .1rem;
+    height: .1rem;
+    background-color: transparent;
+    font-size: 1rem;
+}
+
+.sortup-name, .sortup-major,.sortup-gpa,
+.sortdown-name, .sortdown-major,.sortdown-gpa{
+    color: white;
+}
+
+.sortdown-name, .sortdown-major,.sortdown-gpa{
+    margin-top: -1rem;
+}
+
+.sort{
+    display: flex;
+    flex-direction: column;
+}
+
+.filterdown{
+    margin-top: .5rem;
+}
+
+.filter-input{
+    width: 2rem;
+}
+
+.sort-by-name{
+    background-color: #2b267c;
+    color: white;
+}
+
+.sort-by-gpa{
+    background-color: #4b4886;
+    color: white;
+}
+
+.delete, .edit{
+    border: none;
+    color: white;
+}
+
+.delete{
+    background-color: rgb(232, 95, 95);
+}
+
+.edit{
+    background-color: rgb(25, 110, 25);
+}
+
+textarea{
+    height: 1rem;
+    resize: none;
+}
+
+.gpa textarea{
+    width: 2rem;
+}
+
+.number-and-avg{
+    background-color: bisque;
+    display: block;
+    height: 3.3rem;
+    margin-top: 1rem;
+}
+
+@media screen and (max-width: 700px) {
+    .all-project{
+        margin-left: 10%;
+    }
+
+    .statistics{
+        display: grid;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .search-and-filter input{
+        width: 20rem;
+    }
+}
