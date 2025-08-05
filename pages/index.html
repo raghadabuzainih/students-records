@@ -21,8 +21,16 @@
             <div class="search-and-filter">
                 <input type="text" class="name-search" placeholder="Search By Name" data-i18n-placeholder="Search By Name">
                 <input type="text" class="major-search" placeholder="Search By Major" data-i18n-placeholder="Search By Major">
-                <span data-i18n="Filter GPA">Filter GPA</span> <div class="sort"><button class="filterup"><i class="fa-solid fa-sort-up"></i></button><button class="filterdown"><i class="fa-solid fa-sort-down"></i></button></div>
-                <input class="filter-input" type="text">
+                <label for="filter-gpa" data-i18n="Filter GPA">Filter GPA</label>
+                <div>
+                    <select id="filter-gpa">
+                        <option value="default" data-i18n="No Filter">No Filter</option>
+                        <option value=">">></option>
+                        <option value="=">=</option>
+                        <option value="<"><</option>
+                    </select>
+                    <input type="text" class="filter-input">
+                </div>
             </div>
             </div>
             <div class="statistics">
@@ -125,6 +133,16 @@
             <button type="submit" class="cancel-edit" data-i18n="Cancel">Cancel</button>
         </div>
     </div>
+    <div class="input-language-alert">
+        <h2 data-i18n="Language Alert">Write in English only</h2>
+        <button type="submit" class="cancel-input-alert" data-i18n="Cancel">Cancel</button>
+    </div>
+    <div class="null-input-alert">
+        <h2 data-i18n="Null Input Alert">Fill all the required field</h2>
+        <button type="submit" class="cancel-lang-alert" data-i18n="Cancel">Cancel</button>
+    </div>
+    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>

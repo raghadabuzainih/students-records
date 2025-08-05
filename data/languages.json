@@ -8,6 +8,7 @@
       "Search By Name": "Search By Name",
       "Search By Major": "Search By Major",
       "Filter GPA": "Filter GPA",
+      "No Filter": "No Filter",
       "Name": "Name",
       "Major": "Major",
       "GPA": "GPA",
@@ -23,7 +24,9 @@
       "Deletion Message": "Are you sure you want to delete this student?",
       "Yes": "Yes",
       "No": "No",
-      "Save Changes": "Save Changes"
+      "Save Changes": "Save Changes",
+      "Language Alert": "Write in English only",
+      "Null Input Alert": "Fill all the required field"
     },
     "ar": {
       "Students Records": "سجلات الطلاب",
@@ -32,7 +35,8 @@
       "Add New Student": "+ إضافة طالب جديد",
       "Search By Name": "البحث بالاسم",
       "Search By Major": "البحث بالتخصص",
-      "Filter GPA": "تصفية المعدل",
+      "Filter GPA": "تصفية المعدل",     
+      "No Filter": "لا يوجد فلترة",
       "Name": "الاسم",
       "Major": "التخصص",
       "GPA": "المعدل",
@@ -48,7 +52,9 @@
       "Deletion Message": "هل أنت متأكد أنك تريد حذف هذا الطالب؟",
       "Yes": "نعم",
       "No": "لا",
-      "Save Changes": "حفظ التعديلات"
+      "Save Changes": "حفظ التعديلات",
+      "Language Alert": "اكتب بالعربية فقط",
+      "Null Input Alert": "املئ جميع الحقول المطلوبة"
     }
   }
 ]

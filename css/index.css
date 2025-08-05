@@ -62,12 +62,12 @@ button{
     background-color: rgb(83, 145, 83);
 }
 
-.confirm-delete{
+.confirm-delete, .input-language-alert, .null-input-alert{
+    background-color: rgb(236, 87, 87);
     display: none;
     padding: 1rem;
     position: absolute;
     top: 35%;
-    width: 30rem;
     left: 33%;
     z-index: 1;
     border-radius: 1rem;
@@ -75,7 +75,11 @@ button{
 }
 
 .confirm-delete{
-    background-color: rgb(236, 87, 87);
+    width: 30rem;
+}
+
+.input-language-alert, .null-input-alert{
+    width: 20rem;
 }
 
 .confirm-edit{
@@ -156,11 +160,6 @@ td, th, .info-table button{
     display: flex;
     gap: 1rem;
     justify-content: space-between;
-}
-
-.filter{
-    display: flex;
-    background-color: #2b267c;
 }
 
 .name-search, .major-search{
@@ -254,6 +253,11 @@ textarea{
     display: block;
     height: 3.3rem;
     margin-top: 1rem;
+}
+
+canvas{
+    display: grid;
+    justify-self: center;
 }
 
 @media screen and (max-width: 700px) {

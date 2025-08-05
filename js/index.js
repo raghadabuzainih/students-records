@@ -4,35 +4,77 @@ function setData(data){
     localStorage.setItem('data', JSON.stringify(data))
 }
 
-let data, translation
+let data, translation, counts={}
 let language = localStorage.getItem('language') ? localStorage.getItem('language') : 'en'
+let sumGPA = 0.0
+
 function setLanguage(language){
     localStorage.setItem('language', language)
 }
 let arabic = /[\u0600-\u06FF]/
+let xValues = []
+let yValues = [0, .5, 1, 1.5, 2, 2.5, 3, 3.5, 4]
+let barColors = []
+let myChart =new Chart("myChart", {
+    type: "bar",
+    data: {
+        labels: xValues,
+        datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+        }]
+    },
+    options: {
+        legend: {display: false},
+        title: {
+            display: true,
+            text: "Avg GPA"
+        }
+    }
+})
 const studentsNumber = document.querySelector('.students-number')
 studentsNumber.textContent = 0
 
 async function startup(){
-    data = JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data')) : await getRecords()
-    translation = await getTranslation()
-    getTotalAvg()
+    try{
+        data = JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data')) : await getRecords()
+        translation = await getTranslation()
+        getTotalAvg()
 
-    for(let item of data){
-        addMajorCount(item['major'])
-        if(arabic.test(item.name) && language == 'ar' || (!arabic.test(item.name) && language == 'en')) studentsNumber.textContent = +studentsNumber.textContent+1
+        for(let item of data){
+            addMajorCount(item['major'])
+            if(arabic.test(item.name) && language == 'ar' || (!arabic.test(item.name) && language == 'en')) studentsNumber.textContent = +studentsNumber.textContent+1
+        }
+        for(let key in counts){
+            addNewMajorCountRow(key) //for 'students by major' table
+            chart(key)
+        }  
+        setTranslation()
+        console.log(yValues)
+        console.log(xValues)
+    }catch(err){
+        console.error(err)
     }
-
-    for(let key in counts){
-        addNewMajorCountRow(key) //for 'students by major' table
-    }
-    
-    setTranslation()
 }
 
 startup()
+
 for(let item of data){
     addNewRow(item) //for 'students records' table
+}
+
+function chart(key){
+    if(arabic.test(key) && language == 'ar' || (!arabic.test(key) && language == 'en')) xValues.unshift(key)
+    else return
+    countTable.querySelectorAll('.major-count-table').forEach(major =>{
+        if((arabic.test(key) && language == 'ar' || (!arabic.test(key) && language == 'en')) && major.textContent == key){
+            yValues.unshift(major.parentElement.querySelector('.avg-major').textContent)
+            return
+        }
+    })
+    if(barColors.length == 0) barColors.push('rgb(232, 95, 95)')
+    else barColors[barColors.length] = barColors[barColors.length-1] == 'rgb(232, 95, 95)' ? 'rgb(25, 110, 25)' : 'rgb(232, 95, 95)'
+    myChart.update()
 }
 
 async function getRecords(){
@@ -63,25 +105,7 @@ switchButton.addEventListener('click', (e)=>{
     language = language == 'en' ? 'ar' : 'en'
     setLanguage(language)
     setTranslation()
-    studentsNumber.textContent = 0
-    sumGPA=0.0
-    getTotalAvg()
-    infoTable.querySelectorAll('tr').forEach(row => {
-        if(row.className != ''){ //if it's not equal to first row because first row has titles and there is no class name for it
-            if(arabic.test(row.firstChild.textContent) && language == 'ar' || (!arabic.test(row.firstChild.textContent) && language == 'en')){
-                row.style.display = 'table-row'
-                studentsNumber.textContent = +studentsNumber.textContent+1
-            }
-            else row.style.display = 'none'
-        }else row.style.display = 'table-row'
-    })
-    countTable.querySelectorAll('tr').forEach(row => {
-        if(row.firstChild.textContent != 'التخصص' || row.firstChild.textContent != 'Major'){
-            if(arabic.test(row.firstChild.textContent) && language == 'ar' || (!arabic.test(row.firstChild.textContent) && language == 'en')){
-                row.style.display = 'table-row'
-            }else row.style.display = 'none'
-        }else row.style.display = 'table-row'
-    })
+    location.reload()
 })
 
 function setTranslation(){
@@ -95,12 +119,10 @@ function setTranslation(){
 }
 
 const avgGPA = document.querySelector('.avg-gpa')
-let sumGPA = 0.0
 
 //wanna count total students of each major
 const countTable = document.querySelector('.count-table')
 
-let counts = {}
 function addMajorCount(major){
     if(Object.keys(counts).includes(major)) counts[major] = counts[major]+1
     else counts[major] = 1
@@ -173,19 +195,9 @@ newSubmission.addEventListener('click',(e)=>{
         gpa: addForm.gpa.value
     }
     if(addForm.name.value == '' || addForm.major.value == '' || addForm.gpa.value == ''){
-        alert(translation[0][language]['Alert Message'])
+        nullInputAlert.style.display = 'block'
+        blur.style.display = 'block'
         return
-    }
-    if(language == 'ar'){
-        if(!arabic.test(item.name) || !arabic.test(item.major)){
-            alert('اكتب باللغة العربية فقط')
-            return
-        }
-    }else if(language == 'en'){
-        if(arabic.test(item.name) || arabic.test(item.major)){
-            alert('write english language')
-            return
-        }
     }
     addForm.name.value = ''
     addForm.major.value = ''
@@ -201,8 +213,14 @@ newSubmission.addEventListener('click',(e)=>{
 
 const nameSearch = document.querySelector('.name-search')
 const majorSearch = document.querySelector('.major-search')
+const inputLanguageAlert = document.querySelector('.input-language-alert')
 
 nameSearch.addEventListener('input', (e)=>{
+    if(arabic.test(e.target.value) && language=='en' ||
+        (!arabic.test(e.target.value) && language=='ar')){
+            inputLanguageAlert.style.display ='block'
+            blur.style.display ='block'
+        }
     document.querySelectorAll('.name').forEach(name=>{
         if(e.target.value == ''){
             if(language == 'ar' && arabic.test(name.textContent) || (language == 'en' && !arabic.test(name.textContent))) name.parentElement.style.display = 'table-row'
@@ -217,6 +235,11 @@ nameSearch.addEventListener('input', (e)=>{
 })
 
 majorSearch.addEventListener('input', (e)=>{
+    if(arabic.test(e.target.value) && language=='en' ||
+        (!arabic.test(e.target.value) && language=='ar')){
+            inputLanguageAlert.style.display ='block'
+            blur.style.display ='block'
+        }
     document.querySelectorAll('.major').forEach(major=>{
         if(e.target.value == ''){
             if(language == 'ar' && arabic.test(major.textContent) || (language == 'en' && !arabic.test(major.textContent))) major.parentElement.style.display = 'table-row'
@@ -226,35 +249,76 @@ majorSearch.addEventListener('input', (e)=>{
                 (!arabic.test(e.target.value) && language == 'en' && !arabic.test(major.textContent))){
             if(major.textContent.toLowerCase().includes(e.target.value.toLowerCase())) major.parentElement.style.display = 'table-row'
             else major.parentElement.style.display = 'none'
-        }else major.parentElement.style.display = 'none'
+        }else major.parentElement.style.display = 'none' //ex: if e.target.value in arabic & language in english
+
     })
 })
 
-const filterInput = document.querySelector('.filter-input')
-document.querySelector('.filterup').addEventListener('click',(e)=>{
-    e.preventDefault()
-    if(+filterInput.value >= 0 && +filterInput.value <= 4){
-        infoTable.querySelectorAll('.gpa').forEach(x => {
-            if(+x.textContent < +filterInput.value || 
-                (language == 'ar' && !arabic.test(x.parentElement.querySelector('.name').textContent))
-                || (language == 'en' && arabic.test(x.parentElement.querySelector('.name').textContent)))
-            {
-                x.parentElement.style.display = "none"
-            }
-            else x.parentElement.style.display = "table-row"
-        })
-    }
+const inputsToCheck = document.querySelectorAll('#name, #major, #editName,#editMajor')
+inputsToCheck.forEach(input => {
+    input.addEventListener('input', (e) => {
+        e.preventDefault()
+        const val = e.target.value
+
+        if ((arabic.test(val) && language == 'en') ||
+            (!arabic.test(val) && language == 'ar')) {
+            
+            inputLanguageAlert.style.display = 'block'
+            blur.style.display = 'block'
+        }
+    })
 })
 
-document.querySelector('.filterdown').addEventListener('click',(e)=>{
+
+document.querySelector('.cancel-input-alert').addEventListener('click', (e)=>{
     e.preventDefault()
-    if(+filterInput.value >= 0 && +filterInput.value <= 4){
+    inputLanguageAlert.style.display = 'none'
+    blur.style.display = 'none'
+})
+
+const nullInputAlert = document.querySelector('.null-input-alert')
+
+document.querySelector('.cancel-lang-alert').addEventListener('click', (e)=>{
+    e.preventDefault()
+    inputLanguageAlert.style.display = 'none'
+    nullInputAlert.style.display = 'none'
+    blur.style.display = 'none'
+})
+
+const filterInput = document.querySelector('.filter-input')
+let filterOption
+document.querySelector('#filter-gpa').addEventListener('change', (e)=>{
+    e.preventDefault()
+    filterOption = e.target.value
+    if(filterOption == '='){
         infoTable.querySelectorAll('.gpa').forEach(x => {
-            if(+x.textContent >= +filterInput.value || 
-                (language == 'ar' && !arabic.test(x.parentElement.querySelector('.name').textContent))
-                || (language == 'en' && arabic.test(x.parentElement.querySelector('.name').textContent)))
-            {
-                 x.parentElement.style.display = "none"
+            if(+x.textContent == +filterInput.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            } else x.parentElement.style.display = "none"
+        })
+    }else if(filterOption == '<'){
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if(+x.textContent < +filterInput.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            }else x.parentElement.style.display = "none"
+        })
+    }else if(filterOption == '>'){
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if(+x.textContent > +filterInput.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            }else x.parentElement.style.display = "none"
+        })
+    }else{
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if((language == 'ar' && !arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && arabic.test(x.parentElement.querySelector('.name').textContent))){
+                x.parentElement.style.display = "none"
             }
             else x.parentElement.style.display = "table-row"
         })
@@ -263,11 +327,37 @@ document.querySelector('.filterdown').addEventListener('click',(e)=>{
 
 filterInput.addEventListener('input',(e)=>{
     e.preventDefault()
-    if(e.target.value == ''){
-        infoTable.querySelectorAll('tr').forEach(row => {
-            if(row.className == '' || (arabic.test(row.firstChild.textContent) && language == 'ar') || (!arabic.test(row.firstChild.textContent) && language == 'en')){
-                row.style.display = 'table-row'
-            }else row.style.display = 'none'
+    if(filterOption == '='){
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if(+x.textContent == e.target.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            } else x.parentElement.style.display = "none"
+        })
+    }else if(filterOption == '<'){
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if(+x.textContent < e.target.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            }else x.parentElement.style.display = "none"
+        })
+    }else if(filterOption == '>'){
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if(+x.textContent > e.target.value &&
+                ((language == 'ar' && arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && !arabic.test(x.parentElement.querySelector('.name').textContent)))){
+                x.parentElement.style.display = "table-row"
+            }else x.parentElement.style.display = "none"
+        })
+    }else{
+        infoTable.querySelectorAll('.gpa').forEach(x => {
+            if((language == 'ar' && !arabic.test(x.parentElement.querySelector('.name').textContent))
+                || (language == 'en' && arabic.test(x.parentElement.querySelector('.name').textContent))){
+                x.parentElement.style.display = "none"
+            }
+            else x.parentElement.style.display = "table-row"
         })
     }
 })
@@ -301,12 +391,12 @@ document.querySelector('.save').addEventListener('click', (e)=>{
         return
     }
     if(language == 'ar'){
-        if(!arabic.test(item.name) || !arabic.test(item.major) || !arabic.test(item.gpa)){
+        if(!arabic.test(item.name) || !arabic.test(item.major)){
             alert('اكتب باللغة العربية فقط')
             return
         }
     }else if(language == 'en'){
-        if(arabic.test(item.name) || arabic.test(item.major) || arabic.test(item.gpa)){
+        if(arabic.test(item.name) || arabic.test(item.major)){
             alert('write english language')
             return
         }
@@ -316,7 +406,7 @@ document.querySelector('.save').addEventListener('click', (e)=>{
     parent.querySelector('.gpa').textContent = item.gpa
     editAlert.style.display = 'none'
     blur.style.display = 'none'
-    location.reload() //to updat
+    location.reload()
 })
 
 document.querySelector('.cancel-edit').addEventListener('click', (e)=>{
@@ -378,6 +468,7 @@ function addNewMajorCountRow(key){
     let row = document.createElement('tr')
     let major = document.createElement('td')
     major.textContent = key
+    major.className= 'major-count-table'
     row.appendChild(major)
     let count = document.createElement('td')
     count.textContent = counts[key]
