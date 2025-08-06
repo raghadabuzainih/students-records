@@ -25,7 +25,9 @@
       "No": "No",
       "Save Changes": "Save Changes",
       "Language Alert": "Write in English only",
-      "Null Input Alert": "Fill all the required field"
+      "Null Input Alert": "Fill all the required field",
+      "Error Fetching Data": "An error occurred while ",
+      "Student Data": "loading student data"
     },
     "ar": {
       "Students Records": "سجلات الطلاب",
@@ -52,7 +54,9 @@
       "No": "لا",
       "Save Changes": "حفظ التعديلات",
       "Language Alert": "اكتب بالعربية فقط",
-      "Null Input Alert": "املئ جميع الحقول المطلوبة"
+      "Null Input Alert": "املئ جميع الحقول المطلوبة",
+      "Error Fetching Data": "حدث خطأ أثناء ",
+      "Student Data": "loading translation data"
     }
   }
 ]

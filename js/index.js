@@ -1,6 +1,9 @@
 const infoTable = document.querySelector('.info-table')
-let data, translation, counts={}
-let language = localStorage.getItem('language') ? localStorage.getItem('language') : 'en'
+let data= getData() || []
+let translation, counts={}
+const fetchStudentsAlert = document.querySelector('.error-fetching-students')
+const fetchTranslationAlert = document.querySelector('.error-fetching-translation')
+let language = getLanguage()
 let sumGPA = 0.0
 const avgGPA = document.querySelector('.avg-gpa')
 const addButton = document.querySelector('.add')
@@ -47,17 +50,8 @@ let myChart =new Chart("myChart", {
 const studentsNumber = document.querySelector('.students-number')
 studentsNumber.textContent = 0
 
-function setData(data){
-    localStorage.setItem('data', JSON.stringify(data))
-}
-
-function setLanguage(language){
-    localStorage.setItem('language', language)
-}
-
 async function startup(){
     try{
-        data = JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data')) : await getRecords()
         translation = await getTranslation()
         getTotalAvg()
 
@@ -74,8 +68,43 @@ async function startup(){
         console.error(err)
     }
 }
-
 startup()
+
+function setData(data) {
+    const dataWithExpiry = {
+        value: data,
+        expiry: new Date().getTime() + 30 * 24 * 60 * 60 * 1000 //30 days(1 month)
+    };
+    localStorage.setItem('data', JSON.stringify(dataWithExpiry))
+}
+ 
+function getData() {
+    const dataWithExpiry = JSON.parse(localStorage.getItem('data'))
+    if (!dataWithExpiry) return null
+    const { value, expiry } = dataWithExpiry //destructuring
+    if (new Date().getTime() > expiry) {
+        localStorage.removeItem('data')
+        return null
+    }
+    return value
+}
+
+function setLanguage(language){
+    //language => cookie's name & ${language} value of it
+    //path => same lanuage for every page in the website
+    //if there is no max-age then the cookie will deleted after closing the browser
+    document.cookie = `language=${language}; path=/; max-age=${24 * 60 * 60}` //1 day(24h)
+}
+
+function getLanguage(){
+    let cookies = document.cookie.split(';')
+    for(let cookie of cookies){
+        let [key, value] = cookie.trim().split('=') //destructuring
+        if(key == 'language') return value
+    }
+    return 'en' //default value
+}
+
 for(let item of data){
     addNewRow(item) //for 'students records' table
 }
@@ -101,6 +130,8 @@ async function getRecords(){
         let records = await responce.json()
         return records
     }catch(err){
+        fetchStudentsAlert.style.display ='block'
+        blur.style.display = 'block'
         console.error(err)
         return []
     }
@@ -112,10 +143,21 @@ async function getTranslation(){
         let translation = await responce.json()
         return translation
     }catch(err){
+        fetchTranslationAlert.style.display ='block'
+        blur.style.display = 'block'
         console.error(err)
         return []
     }
 }
+
+document.querySelectorAll('.cancel-fetching-alert').forEach(cancel =>{
+    cancel.addEventListener('click',(e)=>{
+        e.preventDefault()
+        const alert = cancel.parentElement
+        if(alert ==fetchStudentsAlert) hideAlertAndBlur(fetchStudentsAlert)
+        else if(alert ==fetchTranslationAlert) hideAlertAndBlur(fetchTranslationAlert)
+    })
+})
 
 //switch language button
 const switchButton =document.querySelector('.switch-lan')
@@ -138,8 +180,7 @@ function setTranslation(){
 }
 
 function addMajorCount(major){
-    if(Object.keys(counts).includes(major)) counts[major] = counts[major]+1
-    else counts[major] = 1
+    counts[major] = (counts[major] || 0) + 1
 }
 
 function checkWordAndLanguage(word){
@@ -380,11 +421,6 @@ function updateMajorAvgGPA(major){
             row.querySelector('.avg-major').textContent = (sum/counts[major]).toFixed(2)
         }         
     })
-}
-
-function addMajorCount(major){
-    if(Object.keys(counts).includes(major)) counts[major] = counts[major]+1
-    else counts[major] = 1
 }
 
 function addNewMajorCountRow(key){

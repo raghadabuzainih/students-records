@@ -62,7 +62,8 @@ button{
     background-color: rgb(83, 145, 83);
 }
 
-.confirm-delete, .input-language-alert, .null-input-alert{
+.confirm-delete, .input-language-alert, .null-input-alert
+, .error-fetching-students, .error-fetching-translation{
     background-color: rgb(236, 87, 87);
     display: none;
     padding: 1rem;
